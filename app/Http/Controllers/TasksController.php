@@ -18,11 +18,6 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
-
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
         
          $data = [];
         if (\Auth::check()) {
@@ -72,13 +67,14 @@ class TasksController extends Controller
         
         $request->user()->tasks()->create([
             'content' => $request->content,
+            'status' => $request->status,
         ]);
         
         
-        $task = new Task;
-        $task->status = $request->status;
-        $task->content = $request->content;
-        $task->save();
+        // $task = new Task;
+        // $task->status = $request->status;
+        // $task->content = $request->content;
+        // $task->save();
 
         return redirect('/');
         
@@ -93,10 +89,14 @@ class TasksController extends Controller
     public function show($id)
     {
         $task = Task::find($id);
-
+        if(\Auth::user()->id === $task->user_id){
         return view('tasks.show', [
             'task' => $task,
         ]);
+    }
+    else{
+        return redirect()->back();
+     }
     }
 
     /**
@@ -106,14 +106,22 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   
+        
         $task = Task::find($id);
-
+        // var_dump($id);
+        // var_dump($task);
+        // exit;
+        if(\Auth::user()->id === $task->user_id){
+        
         return view('tasks.edit', [
-            'task' => $task,
+            'task' => $task
         ]);
     }
-
+    else{
+        return redirect()->back();
+    }
+}
     /**
      * Update the specified resource in storage.
      *
@@ -144,8 +152,9 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        $task = Task::find($id);
-        $task->delete();
+    //$task = Task::find($id);
+        
+    //    $task->delete();
         
         $task = \App\Task::find($id);
 

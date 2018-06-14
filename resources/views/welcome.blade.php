@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('status')
+@section('content')
     @if (Auth::check())
         <div class="row">
             <aside class="col-md-4">
