@@ -112,6 +112,11 @@ class TasksController extends Controller
         // var_dump($id);
         // var_dump($task);
         // exit;
+        if (empty($task)) {
+            return redirect('/');
+        }
+        
+        else{
         if(\Auth::user()->id === $task->user_id){
         
         return view('tasks.edit', [
@@ -121,6 +126,7 @@ class TasksController extends Controller
     else{
         return redirect()->back();
     }
+}
 }
     /**
      * Update the specified resource in storage.
